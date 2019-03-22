@@ -356,7 +356,18 @@ public class TelaCriar extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
-        // TODO add your handling code here:
+        txtNome.setText("");
+        getQuantidade.setModel(new javax.swing.SpinnerNumberModel(0, 0, 100, 1));
+        listaColunas.setModel(new javax.swing.AbstractListModel<String>() {
+            
+            public int getSize() {
+                return 0;
+            }
+
+            public String getElementAt(int i) {
+                return null;
+            }
+        });
     }//GEN-LAST:event_btnLimparActionPerformed
 
     private void btnListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarActionPerformed
