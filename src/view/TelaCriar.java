@@ -5,17 +5,34 @@
  */
 package view;
 
+import classes.Coluna;
+import classes.ManipuladorIOFiles;
+import classes.Tabela;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
 /**
  *
- * @author off1c
+ * @author isaacmsl
  */
 public class TelaCriar extends javax.swing.JFrame {
 
     /**
      * Creates new form TelaListar
      */
+    
+    private ArrayList<Coluna> colunas;
+    private TelaColuna telaColuna;
+    
     public TelaCriar() {
         initComponents();
+        
+        btnListar.setEnabled(false);
+        
+        colunas = new ArrayList<Coluna>();
     }
 
     /**
@@ -34,17 +51,21 @@ public class TelaCriar extends javax.swing.JFrame {
         panelNome = new javax.swing.JPanel();
         lblNome = new javax.swing.JLabel();
         panelColunas = new javax.swing.JPanel();
-        btnAdicionar = new javax.swing.JButton();
-        panelChave = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        btnCriar = new javax.swing.JButton();
         panelQuantidade = new javax.swing.JPanel();
         lblQuantidade = new javax.swing.JLabel();
-        getChave = new javax.swing.JComboBox<>();
         getQuantidade = new javax.swing.JSpinner();
+        panelCriadas = new javax.swing.JPanel();
+        lblCriadas = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        listaColunas = new javax.swing.JList<>();
+        btnListar = new javax.swing.JButton();
         btnSalvar = new javax.swing.JButton();
         btnLimpar = new javax.swing.JButton();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         panel.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -98,7 +119,7 @@ public class TelaCriar extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(panelNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtNome, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
+                .addComponent(txtNome, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panelTabelaLayout.setVerticalGroup(
@@ -114,38 +135,14 @@ public class TelaCriar extends javax.swing.JFrame {
         panelColunas.setBackground(new java.awt.Color(249, 249, 249));
         panelColunas.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Colunas", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 14))); // NOI18N
 
-        btnAdicionar.setBackground(new java.awt.Color(255, 255, 255));
-        btnAdicionar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnAdicionar.setText("Adicionar");
-        btnAdicionar.addActionListener(new java.awt.event.ActionListener() {
+        btnCriar.setBackground(new java.awt.Color(255, 255, 255));
+        btnCriar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnCriar.setText("Criar");
+        btnCriar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAdicionarActionPerformed(evt);
+                btnCriarActionPerformed(evt);
             }
         });
-
-        panelChave.setBackground(new java.awt.Color(255, 255, 255));
-        panelChave.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        panelChave.setOpaque(false);
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel2.setText("Chave primária:");
-
-        javax.swing.GroupLayout panelChaveLayout = new javax.swing.GroupLayout(panelChave);
-        panelChave.setLayout(panelChaveLayout);
-        panelChaveLayout.setHorizontalGroup(
-            panelChaveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelChaveLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        panelChaveLayout.setVerticalGroup(
-            panelChaveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelChaveLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addContainerGap())
-        );
 
         panelQuantidade.setBackground(new java.awt.Color(255, 255, 255));
         panelQuantidade.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -160,35 +157,77 @@ public class TelaCriar extends javax.swing.JFrame {
             .addGroup(panelQuantidadeLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblQuantidade)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
         panelQuantidadeLayout.setVerticalGroup(
             panelQuantidadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelQuantidadeLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblQuantidade)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(lblQuantidade, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         getQuantidade.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        getQuantidade.setModel(new javax.swing.SpinnerNumberModel(0, 0, 100, 1));
         getQuantidade.setToolTipText("");
+
+        lblCriadas.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblCriadas.setText("Criadas:");
+
+        listaColunas.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jScrollPane1.setViewportView(listaColunas);
+
+        btnListar.setBackground(new java.awt.Color(255, 255, 255));
+        btnListar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnListar.setText("Listar");
+        btnListar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelCriadasLayout = new javax.swing.GroupLayout(panelCriadas);
+        panelCriadas.setLayout(panelCriadasLayout);
+        panelCriadasLayout.setHorizontalGroup(
+            panelCriadasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelCriadasLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelCriadasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelCriadasLayout.createSequentialGroup()
+                        .addComponent(lblCriadas)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCriadasLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnListar)))
+                .addContainerGap())
+        );
+        panelCriadasLayout.setVerticalGroup(
+            panelCriadasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelCriadasLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblCriadas)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnListar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(12, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout panelColunasLayout = new javax.swing.GroupLayout(panelColunas);
         panelColunas.setLayout(panelColunasLayout);
         panelColunasLayout.setHorizontalGroup(
             panelColunasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelColunasLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelColunasLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelColunasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(panelChave, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(panelQuantidade, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelColunasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelColunasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(panelCriadas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(panelColunasLayout.createSequentialGroup()
+                        .addComponent(panelQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(getQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnAdicionar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(getChave, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnCriar, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         panelColunasLayout.setVerticalGroup(
@@ -196,16 +235,12 @@ public class TelaCriar extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelColunasLayout.createSequentialGroup()
                 .addGap(29, 29, 29)
                 .addGroup(panelColunasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnAdicionar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnCriar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(panelQuantidade, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(getQuantidade))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelColunasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelColunasLayout.createSequentialGroup()
-                        .addComponent(panelChave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(getChave))
-                .addGap(29, 29, 29))
+                .addComponent(panelCriadas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         btnSalvar.setBackground(new java.awt.Color(255, 255, 255));
@@ -243,6 +278,10 @@ public class TelaCriar extends javax.swing.JFrame {
                     .addComponent(panelColunas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(panelTabela, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(121, 121, 121))
         );
         panelLayout.setVerticalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -251,12 +290,13 @@ public class TelaCriar extends javax.swing.JFrame {
                 .addComponent(panelTabela, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(panelColunas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVoltar)
                     .addComponent(btnSalvar)
                     .addComponent(btnLimpar))
-                .addGap(20, 20, 20))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -274,24 +314,55 @@ public class TelaCriar extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
-        this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
 
     private void txtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNomeActionPerformed
 
-    private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnAdicionarActionPerformed
+    private void btnCriarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCriarActionPerformed
+        
+        int qntColunas = (int) getQuantidade.getValue();
+        if (qntColunas > 0) {
+            this.telaColuna = new TelaColuna(qntColunas);
+            telaColuna.setVisible(true);
+            btnListar.setEnabled(true);
+        }    
+    }//GEN-LAST:event_btnCriarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        // TODO add your handling code here:
+        if(!txtNome.getText().equals("")){
+            ArrayList<Tabela> tabelas = new ArrayList<>();
+            
+            String nomeTabela = txtNome.getText();
+            tabelas.add(new Tabela(nomeTabela, colunas));
+            
+            try{
+                FileOutputStream fos = new FileOutputStream( new File("Tabelas.tab"), true);
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+                oos.writeObject(tabelas);
+
+                oos.close();
+                fos.close();
+            }catch (Exception e){
+                JOptionPane.showMessageDialog(null, "Não foi possível salvar o arquivo");
+            }   
+            
+            this.dispose();
+        }
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnLimparActionPerformed
+
+    private void btnListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarActionPerformed
+        
+        listarColunas();
+        
+    }//GEN-LAST:event_btnListarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -332,21 +403,50 @@ public class TelaCriar extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAdicionar;
+    private javax.swing.JButton btnCriar;
     private javax.swing.JButton btnLimpar;
+    private javax.swing.JButton btnListar;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JButton btnVoltar;
-    private javax.swing.JComboBox<String> getChave;
+    private javax.swing.Box.Filler filler1;
     private javax.swing.JSpinner getQuantidade;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblCriadas;
     private javax.swing.JLabel lblNome;
     private javax.swing.JLabel lblQuantidade;
+    private javax.swing.JList<String> listaColunas;
     private javax.swing.JPanel panel;
-    private javax.swing.JPanel panelChave;
     private javax.swing.JPanel panelColunas;
+    private javax.swing.JPanel panelCriadas;
     private javax.swing.JPanel panelNome;
     private javax.swing.JPanel panelQuantidade;
     private javax.swing.JPanel panelTabela;
     private javax.swing.JTextField txtNome;
     // End of variables declaration//GEN-END:variables
+
+    private void listarColunas() {
+       
+        this.colunas = telaColuna.getColunas();
+        
+        listaColunas.setModel(new javax.swing.AbstractListModel<String>() {
+
+            public int getSize() {
+                return colunas.size();
+            }
+
+            public String getElementAt(int i) {
+                
+                StringBuilder sb = new StringBuilder();
+                
+                if (colunas.get(i).isChavePrimaria()) {
+                    sb.append(colunas.get(i).getNome());
+                    sb.append(" (primary)");
+                } else {
+                    sb.append(colunas.get(i).getNome());
+                }
+                
+                return sb.toString();
+            }
+        });
+    }
 }
