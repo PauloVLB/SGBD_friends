@@ -16,7 +16,7 @@ public class TesteLegal {
         
 //        tabelas = ManipuladorIOFiles.lerArquivoTabela("tabelas.tes");
 //        System.out.println(tabelas);
-        ManipuladorIOFiles.gravarArquivo("tabelas.dat", false, tabelas);
+        ManipuladorIOFiles.gravarArquivo("tabelas.dat", tabelas, false);
         
     }
 }
