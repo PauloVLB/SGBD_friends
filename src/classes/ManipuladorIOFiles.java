@@ -14,12 +14,13 @@ import javax.swing.JOptionPane;
  * @author  douglas
  */
 public class ManipuladorIOFiles {
-    public static void gravarArquivo(String nome, boolean sobrescrever, Object objeto){
+    
+    public static void gravarArquivo(String nome, boolean sobrescrever, ArrayList<Tabela> tabelas){
         try{
             FileOutputStream fos = new FileOutputStream(nome, sobrescrever);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             
-            oos.writeObject(objeto);
+            oos.writeObject(tabelas);
             
             oos.close();
             fos.close();
@@ -28,18 +29,24 @@ public class ManipuladorIOFiles {
         }
     }
     
-    public static void lerArquivoTabela(String nome, ArrayList<Tabela> tabelas){
+    public static ArrayList<Tabela> lerArquivoTabela(String nome){
         try{
             FileInputStream fis = new FileInputStream(nome);
             ObjectInputStream ois = new ObjectInputStream(fis);
             
-            tabelas = (ArrayList<Tabela>) ois.readObject();
+            ArrayList<Tabela> tabelas = (ArrayList<Tabela>) ois.readObject();
             
             ois.close();
             fis.close();
+            
+            return tabelas;
+            
         }catch(Exception e){
             e.printStackTrace();
         }
+       
+        return null;
+        
     }
     
     

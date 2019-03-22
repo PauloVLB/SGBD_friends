@@ -20,6 +20,9 @@ public class TelaListar extends javax.swing.JFrame {
     /**
      * Creates new form TelaCriar
      */
+    
+    private ArrayList<Tabela> tabelas;
+    
     public TelaListar() {
         initComponents();
     }
@@ -37,7 +40,7 @@ public class TelaListar extends javax.swing.JFrame {
         btnMostrar = new javax.swing.JButton();
         btnVoltar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        txtAreaLista = new javax.swing.JTextArea();
+        jList2 = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -62,31 +65,28 @@ public class TelaListar extends javax.swing.JFrame {
             }
         });
 
-        txtAreaLista.setColumns(20);
-        txtAreaLista.setRows(5);
-        jScrollPane1.setViewportView(txtAreaLista);
+        jScrollPane1.setViewportView(jList2);
 
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
         panel.setLayout(panelLayout);
         panelLayout.setHorizontalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
-                .addContainerGap(227, Short.MAX_VALUE)
+            .addGroup(panelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnMostrar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnVoltar)
                 .addGap(28, 28, 28))
-            .addGroup(panelLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE))
         );
         panelLayout.setVerticalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnVoltar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnMostrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -117,7 +117,23 @@ public class TelaListar extends javax.swing.JFrame {
 
     private void btnMostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarActionPerformed
       
-        ArrayList<Tabela> tabelas = new ArrayList<>();
+        tabelas = new ArrayList<>();
+       
+        tabelas = ManipuladorIOFiles.lerArquivoTabela("tabelas.dat");
+        
+        
+        jList2.setModel(new javax.swing.AbstractListModel<String>() {
+            
+            public int getSize() {
+                return tabelas.size();
+            }
+
+            public String getElementAt(int i) {
+                return tabelas.get(i).getNome();
+            }
+        });
+        
+        /*
         try{
             FileInputStream fis = new FileInputStream("Tabelas.tab");
             ObjectInputStream ois = new ObjectInputStream(fis);
@@ -144,7 +160,7 @@ public class TelaListar extends javax.swing.JFrame {
            }
        }
         // MOSTRAR
-        
+        */
     }//GEN-LAST:event_btnMostrarActionPerformed
 
     /**
@@ -186,8 +202,8 @@ public class TelaListar extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnMostrar;
     private javax.swing.JButton btnVoltar;
+    private javax.swing.JList<String> jList2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel panel;
-    private javax.swing.JTextArea txtAreaLista;
     // End of variables declaration//GEN-END:variables
 }

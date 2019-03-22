@@ -41,8 +41,8 @@ public class Tabela implements Serializable{
         this.chavePrimaria = chavePrimaria;
     }
     
-    @Override
+    /*@Override
     public String toString(){
         return "Nome: " + nome;
-    }
+    }*/
 }

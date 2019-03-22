@@ -333,23 +333,24 @@ public class TelaCriar extends javax.swing.JFrame {
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         if(!txtNome.getText().equals("")){
-            ArrayList<Tabela> tabelas = new ArrayList<>();
+            
+            ArrayList<Tabela> tabelasExistentes = ManipuladorIOFiles.lerArquivoTabela("tabelas.dat");
+            
+            ArrayList<Tabela> tabelas = null;
+            
+            if(!tabelasExistentes.isEmpty()) {
+                tabelas = tabelasExistentes;
+            } else {
+                tabelas = new ArrayList<>();
+            }
             
             String nomeTabela = txtNome.getText();
             tabelas.add(new Tabela(nomeTabela, colunas));
             
-            try{
-                FileOutputStream fos = new FileOutputStream( new File("Tabelas.tab"), true);
-                ObjectOutputStream oos = new ObjectOutputStream(fos);
-
-                oos.writeObject(tabelas);
-
-                oos.close();
-                fos.close();
-            }catch (Exception e){
-                JOptionPane.showMessageDialog(null, "Não foi possível salvar o arquivo");
-            }   
+            System.out.println(tabelas);
             
+            ManipuladorIOFiles.gravarArquivo("tabelas.dat", false, tabelas);
+           
             this.dispose();
         }
     }//GEN-LAST:event_btnSalvarActionPerformed
