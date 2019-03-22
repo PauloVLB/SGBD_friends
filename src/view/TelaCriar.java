@@ -349,7 +349,7 @@ public class TelaCriar extends javax.swing.JFrame {
             
             System.out.println(tabelas);
             
-            ManipuladorIOFiles.gravarArquivo("tabelas.dat", false, tabelas);
+            ManipuladorIOFiles.gravarArquivo("tabelas.dat", tabelas, false);
            
             this.dispose();
         }
@@ -441,9 +441,13 @@ public class TelaCriar extends javax.swing.JFrame {
                 
                 if (colunas.get(i).isChavePrimaria()) {
                     sb.append(colunas.get(i).getNome());
+                    sb.append(" : ");
+                    sb.append(colunas.get(i).getTipo());
                     sb.append(" (primary)");
                 } else {
                     sb.append(colunas.get(i).getNome());
+                    sb.append(" : ");
+                    sb.append(colunas.get(i).getTipo());
                 }
                 
                 return sb.toString();

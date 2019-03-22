@@ -126,7 +126,7 @@ public class TelaColuna extends javax.swing.JFrame {
         );
 
         getTipo.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        getTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "String", "double", "int" }));
+        getTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "String", "double", "int", "boolean" }));
 
         btnCriar.setBackground(new java.awt.Color(255, 255, 255));
         btnCriar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
