@@ -354,7 +354,7 @@ public class TelaCriar extends javax.swing.JFrame {
             tabelas.add(tabelaCriada);
             
             System.out.println("Tabela salva: " + tabelaCriada);
-            System.out.println("Colunas salvas: " + tabelaCriada.getAtributos());
+            System.out.println("Colunas salvas: " + tabelaCriada.getColunas());
             
             ManipuladorIOFiles.gravarArquivo("tabelas.dat", tabelas, false);
            

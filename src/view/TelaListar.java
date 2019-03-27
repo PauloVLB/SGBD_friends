@@ -22,6 +22,7 @@ public class TelaListar extends javax.swing.JFrame {
      */
     
     private ArrayList<Tabela> tabelas;
+    private Tabela tabelaSelected;
     
     public TelaListar() {
         initComponents();
@@ -29,6 +30,7 @@ public class TelaListar extends javax.swing.JFrame {
         tabelas = new ArrayList<>();
        
         tabelas = ManipuladorIOFiles.lerArquivoTabela("tabelas.dat");
+        tabelaSelected = new Tabela();
         
         listarTabelas();
     }
@@ -48,8 +50,9 @@ public class TelaListar extends javax.swing.JFrame {
         list = new javax.swing.JList<>();
         txtInfo = new javax.swing.JLabel();
         btnInfo = new javax.swing.JButton();
+        btnAddLinha = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
 
         panel.setBackground(new java.awt.Color(255, 255, 255));
@@ -77,12 +80,21 @@ public class TelaListar extends javax.swing.JFrame {
             }
         });
 
+        btnAddLinha.setText("Add Linha");
+        btnAddLinha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddLinhaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
         panel.setLayout(panelLayout);
         panelLayout.setHorizontalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnAddLinha)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnInfo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnVoltar)
@@ -100,10 +112,11 @@ public class TelaListar extends javax.swing.JFrame {
                 .addComponent(txtInfo)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
+                .addGap(26, 26, 26)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVoltar)
-                    .addComponent(btnInfo))
+                    .addComponent(btnInfo)
+                    .addComponent(btnAddLinha))
                 .addContainerGap(26, Short.MAX_VALUE))
         );
 
@@ -136,25 +149,24 @@ public class TelaListar extends javax.swing.JFrame {
         }
         else {
             
-            String nomeTabelaSelected = list.getSelectedValue();
-
-            Tabela tabelaSelected = null;
-
-            for (Tabela tabela : tabelas) {
-
-                if (tabela.getNome().equals(nomeTabelaSelected)) {
-                    tabelaSelected = tabela;
-                }
-
-            }
+            setTabelaSelected();
             
-            ArrayList<Coluna> colunas = tabelaSelected.getAtributos();
+            ArrayList<Coluna> colunas = tabelaSelected.getColunas();
             
             new TelaInfoTabela(tabelaSelected, colunas).setVisible(true);
         
         }
         
     }//GEN-LAST:event_btnInfoActionPerformed
+
+    private void btnAddLinhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddLinhaActionPerformed
+        if(list.isSelectionEmpty()){ 
+            JOptionPane.showMessageDialog(null, "Selecione uma tabela!");
+        }else{
+            setTabelaSelected();
+            new TelaLinha(tabelaSelected).setVisible(true);
+        }
+    }//GEN-LAST:event_btnAddLinhaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -207,6 +219,7 @@ public class TelaListar extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddLinha;
     private javax.swing.JButton btnInfo;
     private javax.swing.JButton btnVoltar;
     private javax.swing.JScrollPane jScrollPane1;
@@ -214,4 +227,17 @@ public class TelaListar extends javax.swing.JFrame {
     private javax.swing.JPanel panel;
     private javax.swing.JLabel txtInfo;
     // End of variables declaration//GEN-END:variables
+
+    private void setTabelaSelected() {
+        String nomeTabelaSelected = list.getSelectedValue();
+        for (Tabela tabela : tabelas) {
+
+            if (tabela.getNome().equals(nomeTabelaSelected)) {
+                tabelaSelected = tabela;
+            }
+
+        }
+    }
+
+
 }

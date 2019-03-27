@@ -6,6 +6,7 @@
 package classes;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  *
@@ -29,6 +30,28 @@ public class Coluna implements Serializable {
         this.tipo = tipo;
         this.chavePrimaria = chavePrimaria;
         this.value = value;
+    }
+
+    public Coluna(String nome) {
+        this.nome = nome;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Coluna other = (Coluna) obj;
+        if (!Objects.equals(this.nome, other.nome)) {
+            return false;
+        }
+        return true;
     }
     
     @Override
