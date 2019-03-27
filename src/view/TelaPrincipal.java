@@ -42,7 +42,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         btnListar.setBackground(new java.awt.Color(255, 255, 255));
         btnListar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        btnListar.setText("Adicionar Linhas");
+        btnListar.setText("Tabelas");
         btnListar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnListarActionPerformed(evt);

@@ -63,7 +63,7 @@ public class TelaLinha extends javax.swing.JFrame {
         btnCancel = new javax.swing.JButton();
         txtColuna = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
 
         panel.setBackground(new java.awt.Color(255, 255, 255));

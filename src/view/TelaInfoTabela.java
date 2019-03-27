@@ -107,7 +107,7 @@ public class TelaInfoTabela extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         panel.setBackground(new java.awt.Color(255, 255, 255));
 
