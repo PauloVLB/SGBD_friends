@@ -11,12 +11,11 @@ import java.util.ArrayList;
 
 public class TesteLegal {
     public static void main(String[] args) {
-        ArrayList<Tabela> tabelas = new ArrayList<>();
-//        tabelas.add(new Tabela("TesteTabela", null));
+        String a = "acxdfs";
         
-//        tabelas = ManipuladorIOFiles.lerArquivoTabela("tabelas.tes");
-//        System.out.println(tabelas);
-        ManipuladorIOFiles.gravarArquivo("tabelas.dat", tabelas, false);
+        boolean b = Boolean.getBoolean(a);
+        
+        System.out.println(b);
         
     }
 }

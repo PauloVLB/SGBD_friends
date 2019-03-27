@@ -235,21 +235,7 @@ public class TelaLinha extends javax.swing.JFrame {
                     --indexArray;
                 }
                 
-            }/*else{
-                Coluna colunaAtual = colunas.get(--indexArray);
-                coluna.setText(colunaAtual.getNome());
-                String valorLido = getValor.getText();
-                
-                try {
-                    tipoCorreto(valorLido, colunaAtual);
-                    
-                    arrayColunas.add(valorLido);
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "Insira valores válidos!");
-                }
-                
-                this.dispose();
-            } */
+            }
             
             if (indexArray < colunas.size()) {
                 showColuna(colunas.get(indexArray));
@@ -368,9 +354,9 @@ public class TelaLinha extends javax.swing.JFrame {
                 break;
             case "Boolean":
             case "boolean":
-                try {
-                    boolean bool = Boolean.valueOf(valorLido);
-                }  catch (Exception e) {
+                if(!(valorLido.equalsIgnoreCase("true") || 
+                        valorLido.equalsIgnoreCase("false"))) {
+                    Exception e = new Exception();
                     throw e;
                 }
                 break;
