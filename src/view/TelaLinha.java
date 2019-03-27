@@ -225,16 +225,26 @@ public class TelaLinha extends javax.swing.JFrame {
             if(indexArray < colunas.size()){
                 Coluna colunaAtual = colunas.get(indexArray++);
                 String valorLido = getValor.getText();
+                boolean chaveJaExiste = false;
                 
-                try {
-                    tipoCorreto(valorLido, colunaAtual);
-                    
-                    tupla.add(valorLido);
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "Insira valores válidos!");
-                    --indexArray;
+                if(colunaAtual.isChavePrimaria()){
+                    if(getChavesP(colunaAtual).contains(Integer.parseInt(valorLido))){
+                        JOptionPane.showMessageDialog(null, "Chave primária já existe!");
+                        chaveJaExiste = true;
+                        --indexArray;
+                    }
                 }
                 
+                if(!chaveJaExiste){
+                    try {
+                        tipoCorreto(valorLido, colunaAtual);
+
+                        tupla.add(valorLido);
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "Insira valores válidos!");
+                        --indexArray;
+                    }
+                }
             }
             
             if (indexArray < colunas.size()) {
@@ -383,5 +393,16 @@ public class TelaLinha extends javax.swing.JFrame {
         
         txtColuna.setText(sb.toString());
     }
+    
+    private ArrayList<Integer> getChavesP(Coluna colunaAtual){
+        ArrayList<Integer> chavesP = new ArrayList<>();
+        int indexColuna = this.tabela.getColunas().indexOf(colunaAtual);
+        
+        for(String[] linha : this.tabela.getLinhas()){
+            chavesP.add(Integer.parseInt(linha[indexColuna]));
+        }
+        
+        return chavesP;
+    } 
 
 }
