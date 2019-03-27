@@ -88,7 +88,9 @@ public class TelaListar extends javax.swing.JFrame {
             }
         });
 
-        btnAddLinha.setText("Add Linha");
+        btnAddLinha.setBackground(new java.awt.Color(255, 255, 255));
+        btnAddLinha.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnAddLinha.setText("AddLinha");
         btnAddLinha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddLinhaActionPerformed(evt);
@@ -120,7 +122,7 @@ public class TelaListar extends javax.swing.JFrame {
                 .addComponent(txtInfo)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
+                .addGap(27, 27, 27)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVoltar)
                     .addComponent(btnVer)
@@ -168,14 +170,16 @@ public class TelaListar extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVerActionPerformed
 
     private void btnAddLinhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddLinhaActionPerformed
-        if(list.isSelectionEmpty()){
+        if (list.isSelectionEmpty()) {
             JOptionPane.showMessageDialog(null, "Selecione uma tabela!");
-        }else{
+        } else {
             setTabelaSelected();
             new TelaLinha(tabelaSelected).setVisible(true);
         }
     }//GEN-LAST:event_btnAddLinhaActionPerformed
-
+        
+    
+        
     /**
      * @param args the command line arguments
      */

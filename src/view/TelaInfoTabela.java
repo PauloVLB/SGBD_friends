@@ -131,6 +131,7 @@ public class TelaInfoTabela extends javax.swing.JFrame {
 
             }
         ));
+        table.setEnabled(false);
         jScrollPane2.setViewportView(table);
 
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
