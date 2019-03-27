@@ -5,45 +5,31 @@
  */
 package classes;
 
+import java.io.Serializable;
+
 /**
  *
  * @author isaacmsl
  */
-public class Coluna {
+public class Coluna implements Serializable {
     
     private String nome;
     private String tipo;
     private boolean chavePrimaria;
+    private Object value;
 
     public Coluna(String nome, String tipo, boolean chavePrimaria) {
         this.nome = nome;
         this.tipo = tipo;
         this.chavePrimaria = chavePrimaria;
     }
-
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 89 * hash + (this.chavePrimaria ? 1 : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Coluna other = (Coluna) obj;
-        return true;
-    }
     
-    
+    public Coluna(String nome, String tipo, boolean chavePrimaria, Object value) {
+        this.nome = nome;
+        this.tipo = tipo;
+        this.chavePrimaria = chavePrimaria;
+        this.value = value;
+    }
     
     @Override
     public String toString() {
@@ -72,6 +58,14 @@ public class Coluna {
 
     public void setChavePrimaria(boolean chavePrimaria) {
         this.chavePrimaria = chavePrimaria;
+    }
+    
+    public Object getValue() {
+        return value;
+    }
+
+    public void setValue(Object value) {
+        this.value = value;
     }
     
 }

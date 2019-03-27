@@ -24,7 +24,7 @@ public class TelaCriar extends javax.swing.JFrame {
      * Creates new form TelaListar
      */
     
-    private ArrayList<Coluna> colunas;
+    private ArrayList<Coluna> colunasCriadas;
     private TelaColuna telaColuna;
     
     public TelaCriar() {
@@ -32,7 +32,7 @@ public class TelaCriar extends javax.swing.JFrame {
         
         btnListar.setEnabled(false);
         
-        colunas = new ArrayList<Coluna>();
+        colunasCriadas = null;
     }
 
     /**
@@ -172,7 +172,7 @@ public class TelaCriar extends javax.swing.JFrame {
         getQuantidade.setToolTipText("");
 
         lblCriadas.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        lblCriadas.setText("Criadas:");
+        lblCriadas.setText("Colunas criadas:");
 
         listaColunas.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jScrollPane1.setViewportView(listaColunas);
@@ -211,7 +211,7 @@ public class TelaCriar extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnListar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout panelColunasLayout = new javax.swing.GroupLayout(panelColunas);
@@ -327,12 +327,13 @@ public class TelaCriar extends javax.swing.JFrame {
         if (qntColunas > 0) {
             this.telaColuna = new TelaColuna(qntColunas);
             telaColuna.setVisible(true);
-            btnListar.setEnabled(true);
+            
+            esperarTela(); // ?
         }    
     }//GEN-LAST:event_btnCriarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        if(!txtNome.getText().equals("")){
+        if(!txtNome.getText().equals("")){ // qnd nao vazio
             
             ArrayList<Tabela> tabelasExistentes = ManipuladorIOFiles.lerArquivoTabela("tabelas.dat");
             
@@ -344,15 +345,22 @@ public class TelaCriar extends javax.swing.JFrame {
                 tabelas = new ArrayList<>();
             }
             
-            String nomeTabela = txtNome.getText();
-            tabelas.add(new Tabela(nomeTabela, colunas));
+            this.colunasCriadas = telaColuna.getColunas();
             
-            System.out.println(tabelas);
+            System.out.println("colunasCriadas = " + colunasCriadas);
+            
+            String nomeTabela = txtNome.getText();
+            Tabela tabelaCriada = new Tabela(nomeTabela, colunasCriadas);
+            tabelas.add(tabelaCriada);
+            
+            System.out.println("Tabela salva: " + tabelaCriada);
+            System.out.println("Colunas salvas: " + tabelaCriada.getAtributos());
             
             ManipuladorIOFiles.gravarArquivo("tabelas.dat", tabelas, false);
            
             this.dispose();
         }
+        
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
@@ -371,9 +379,7 @@ public class TelaCriar extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLimparActionPerformed
 
     private void btnListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarActionPerformed
-        
         listarColunas();
-        
     }//GEN-LAST:event_btnListarActionPerformed
 
     /**
@@ -437,32 +443,36 @@ public class TelaCriar extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void listarColunas() {
-       
-        this.colunas = telaColuna.getColunas();
+        
+        this.colunasCriadas = telaColuna.getColunas();
         
         listaColunas.setModel(new javax.swing.AbstractListModel<String>() {
 
             public int getSize() {
-                return colunas.size();
+                return colunasCriadas.size();
             }
 
             public String getElementAt(int i) {
                 
                 StringBuilder sb = new StringBuilder();
                 
-                if (colunas.get(i).isChavePrimaria()) {
-                    sb.append(colunas.get(i).getNome());
+                if (colunasCriadas.get(i).isChavePrimaria()) {
+                    sb.append(colunasCriadas.get(i).getNome());
                     sb.append(" : ");
-                    sb.append(colunas.get(i).getTipo());
-                    sb.append(" (primary)");
+                    sb.append(colunasCriadas.get(i).getTipo());
+                    sb.append(" (primary key)");
                 } else {
-                    sb.append(colunas.get(i).getNome());
+                    sb.append(colunasCriadas.get(i).getNome());
                     sb.append(" : ");
-                    sb.append(colunas.get(i).getTipo());
+                    sb.append(colunasCriadas.get(i).getTipo());
                 }
                 
                 return sb.toString();
             }
         });
+    }
+
+    private void esperarTela() {
+        btnListar.setEnabled(true);
     }
 }
