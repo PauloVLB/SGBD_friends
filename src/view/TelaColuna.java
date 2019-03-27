@@ -21,7 +21,6 @@ public class TelaColuna extends javax.swing.JFrame {
     
     private int qntColunas;
     private ArrayList<Coluna> colunasCriadas;
-    private boolean temChave;
     
     public ArrayList<Coluna> getColunas() { return colunasCriadas; } // para a classe TelaCriar conseguir pegas as colunasCriadas
     
@@ -29,19 +28,13 @@ public class TelaColuna extends javax.swing.JFrame {
         initComponents();
         
         this.qntColunas = qnt;
-        
         colunasCriadas = new ArrayList<Coluna>();
-        
-        temChave = false;
-        
     }
     
     public TelaColuna() {
         initComponents();
         
         colunasCriadas = new ArrayList<Coluna>();
-        
-        temChave = false;
     }
 
     /**
@@ -225,7 +218,6 @@ public class TelaColuna extends javax.swing.JFrame {
     }//GEN-LAST:event_getNomeActionPerformed
 
     private void btnCriarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCriarActionPerformed
-        
         String nome = getNome.getText();
         String tipo = (String) getTipo.getSelectedItem();
         boolean chave = getChave.isSelected();
@@ -236,9 +228,9 @@ public class TelaColuna extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Preencha todos os campos!");
         } else {
             Coluna coluna = new Coluna(nome, tipo, chave);
-
             
             boolean invalido = false;
+            
             if (chave) { // vai criar a coluna como chave primária
                 if(!tipo.equals("int")){
                     JOptionPane.showMessageDialog(null, "Sua chave primária deve ser do tipo inteiro!");
@@ -246,22 +238,31 @@ public class TelaColuna extends javax.swing.JFrame {
                 }else{
                     getChave.setEnabled(false);
                 }
-            } 
+            }
             
-            if(!invalido){
-                
+            if(!invalido){  
                 colunasCriadas.add(coluna);
                 JOptionPane.showMessageDialog(null, String.format("(%d) Coluna criada!", colunasCriadas.size()));
             }
         }
         
+        limpar();
         if (colunasCriadas.size() == qntColunas) { // verifica a quantidade de colunas para criar
-            JOptionPane.showMessageDialog(null, "Todas as colunas foram criadas!");
-            this.setVisible(false);
+            if (!temChavePrimaria(colunasCriadas)) {
+                JOptionPane.showMessageDialog(null, "Crie uma coluna para ser chave primária!");
+                
+                getTipo.setSelectedIndex(2);
+                getChave.setSelected(true);
+                getChave.setEnabled(false);
+                getTipo.setEnabled(false);
+                qntColunas++;
+            }else{
+                JOptionPane.showMessageDialog(null, "Todas as colunas foram criadas!");
+                this.dispose();
+            }
         }
         
-        limpar();
-        
+         
     }//GEN-LAST:event_btnCriarActionPerformed
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
@@ -325,6 +326,17 @@ public class TelaColuna extends javax.swing.JFrame {
         getNome.setText("");
         getTipo.setSelectedIndex(0);
         getChave.setSelected(false);
+    }
+    
+    private boolean temChavePrimaria(ArrayList<Coluna> colunas){
+        boolean temChave = false;
+        for(Coluna c : colunas){
+            if(c.isChavePrimaria()) {
+                temChave = true;
+            }
+        }
+        
+        return temChave;
     }
 
 }
