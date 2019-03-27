@@ -17,7 +17,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
      * Creates new form TelaPrincipal
      */
     public TelaPrincipal() {
-        ManipuladorIOFiles.criarArquivo("tabelas.dat");
+        //ManipuladorIOFiles.criarArquivo("tabelas.dat");
         initComponents();
     }
 
@@ -42,7 +42,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         btnListar.setBackground(new java.awt.Color(255, 255, 255));
         btnListar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        btnListar.setText("Listar");
+        btnListar.setText("Adicionar Linhas");
         btnListar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnListarActionPerformed(evt);
@@ -51,7 +51,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         btnCriar.setBackground(new java.awt.Color(255, 255, 255));
         btnCriar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        btnCriar.setText("Criar");
+        btnCriar.setText("Criar Tabela");
         btnCriar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCriarActionPerformed(evt);

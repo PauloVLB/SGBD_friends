@@ -5,9 +5,10 @@
  */
 package view;
 
-import classes.Coluna;
-import classes.Tabela;
+import classes.*;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -24,24 +25,18 @@ public class TelaLinha extends javax.swing.JFrame {
     private ArrayList<Coluna> colunas;
     private Tabela tabela;
     private int indexArray;
-    private String[] vColunas;
-    private ArrayList<String> arrayColunas;
+    private ArrayList<String> tupla;
     
     public TelaLinha(Tabela tabela) {
+        
         initComponents();
         this.tabela = tabela;
         colunas = this.tabela.getColunas();
         qntColunas = colunas.size();
-        arrayColunas = new ArrayList<>();
+        tupla = new ArrayList<>();
         
-        coluna.setText(colunas.get(indexArray++).getNome());
+        showColuna(colunas.get(indexArray));
         
-        vColunas = new String[qntColunas];
-        
-        int i = 0;
-        for (Coluna c : colunas){
-            vColunas[i++] = c.getNome();
-        } 
     }
     
     public TelaLinha() {
@@ -66,7 +61,7 @@ public class TelaLinha extends javax.swing.JFrame {
         btnAdd = new javax.swing.JButton();
         btnLimpar = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
-        coluna = new javax.swing.JLabel();
+        txtColuna = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -155,7 +150,7 @@ public class TelaLinha extends javax.swing.JFrame {
             }
         });
 
-        coluna.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        txtColuna.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
         panel.setLayout(panelLayout);
@@ -178,7 +173,7 @@ public class TelaLinha extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(getValor, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
-                            .addComponent(coluna, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(txtColuna, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(22, 22, 22))
         );
         panelLayout.setVerticalGroup(
@@ -191,7 +186,7 @@ public class TelaLinha extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(coluna, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtColuna, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAdd)
@@ -228,28 +223,68 @@ public class TelaLinha extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Preencha todos os campos!");
         }else{ 
             if(indexArray < colunas.size()){
-                coluna.setText(colunas.get(indexArray++).getNome());
-                arrayColunas.add(getValor.getText());
-            }else{
-                coluna.setText(colunas.get(indexArray-1).getNome());
-                arrayColunas.add(getValor.getText());
+                Coluna colunaAtual = colunas.get(indexArray++);
+                String valorLido = getValor.getText();
                 
-                int cont = 0;
-                for(String i : arrayColunas){
-                    vColunas[cont++] = i;
+                try {
+                    tipoCorreto(valorLido, colunaAtual);
+                    
+                    tupla.add(valorLido);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "Insira valores válidos!");
+                    --indexArray;
                 }
                 
-                for(String i : vColunas){
-                    System.out.println(i);
+            }/*else{
+                Coluna colunaAtual = colunas.get(--indexArray);
+                coluna.setText(colunaAtual.getNome());
+                String valorLido = getValor.getText();
+                
+                try {
+                    tipoCorreto(valorLido, colunaAtual);
+                    
+                    arrayColunas.add(valorLido);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "Insira valores válidos!");
                 }
                 
                 this.dispose();
+            } */
+            
+            if (indexArray < colunas.size()) {
+                showColuna(colunas.get(indexArray));
+            } else {
+                JOptionPane.showMessageDialog(null, "Todos os valores foram inseridos!");
+                
+                tabela.addLinha(tupla);
+
+                ArrayList<Tabela> tabelasExistentes = null;
+                try {
+                    tabelasExistentes = ManipuladorIOFiles.lerArquivoTabela("tabelas.dat");
+                    
+                    ArrayList<Tabela> tabelasParaSalvar = null;
+                    
+                    tabelasParaSalvar = tabelasExistentes;
+                    
+                    int indexTabelaSelected = tabelasParaSalvar.indexOf(tabela);
+                    
+                    
+                    tabelasParaSalvar.set(indexTabelaSelected, tabela);
+
+                    try {
+                        ManipuladorIOFiles.gravarArquivo("tabelas.dat", tabelasParaSalvar, false);
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null, "Não foi possível gravar o arquivo!");
+                    }
+
+                    this.dispose();
+                    
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Erro inesperado ao ler arquivo!");
+                }
+                
             }
-            
-            
        }
-        
-        
         
         limpar();
         
@@ -305,17 +340,62 @@ public class TelaLinha extends javax.swing.JFrame {
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnLimpar;
-    private javax.swing.JLabel coluna;
     private javax.swing.JTextField getValor;
     private javax.swing.JLabel lblColuna;
     private javax.swing.JLabel lblValor;
     private javax.swing.JPanel panel;
     private javax.swing.JPanel panelNome;
     private javax.swing.JPanel panelTipo;
+    private javax.swing.JLabel txtColuna;
     // End of variables declaration//GEN-END:variables
 
     private void limpar() {
         getValor.setText("");
+    }
+
+    private void tipoCorreto(String valorLido, Coluna coluna) throws Exception {
+        
+        String tipoColuna = coluna.getTipo();
+        
+        switch (tipoColuna) {
+            case "Int":
+            case "int":
+                try {
+                    int num = Integer.valueOf(valorLido);
+                } catch (Exception e) {
+                    throw e;
+                } 
+                break;
+            case "Boolean":
+            case "boolean":
+                try {
+                    boolean bool = Boolean.valueOf(valorLido);
+                }  catch (Exception e) {
+                    throw e;
+                }
+                break;
+            case "Double":
+            case "double":
+                try {
+                    double dob = Double.valueOf(valorLido);
+                }  catch (Exception e) {
+                    throw e;
+                }
+                break;
+        }
+    }
+
+    private void showColuna(Coluna coluna) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(coluna.getNome());
+        sb.append(" : ");
+        sb.append(coluna.getTipo());
+        
+        if (coluna.isChavePrimaria()) {
+            sb.append(" (primary key)");
+        }
+        
+        txtColuna.setText(sb.toString());
     }
 
 }

@@ -12,6 +12,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -333,16 +335,28 @@ public class TelaCriar extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCriarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        if(!txtNome.getText().equals("")){ // qnd nao vazio
+        if(!txtNome.getText().equals("")){             try { // qnd nao vazio
             
-            ArrayList<Tabela> tabelasExistentes = ManipuladorIOFiles.lerArquivoTabela("tabelas.dat");
+            ArrayList<Tabela> tabelasExistentes = null;
+            try {
+                tabelasExistentes = ManipuladorIOFiles.lerArquivoTabela("tabelas.dat");
+            } catch (Exception ex) {
+                
+                try { // SE DER ERRO NESSE MÉTODO, CRIAREMOS O ARQUIVO
+                    boolean exists = ManipuladorIOFiles.exists("tabelas.dat");
+                } catch(Exception e) {
+                    ManipuladorIOFiles.criarArquivo("tabelas.dat");
+                }
+                
+            }
             
-            ArrayList<Tabela> tabelas = null;
+            ArrayList<Tabela> tabelasParaSalvar = null;
+            tabelasExistentes = ManipuladorIOFiles.lerArquivoTabela("tabelas.dat");
             
             if(!tabelasExistentes.isEmpty()) {
-                tabelas = tabelasExistentes;
+                tabelasParaSalvar = tabelasExistentes;
             } else {
-                tabelas = new ArrayList<>();
+                tabelasParaSalvar = new ArrayList<>();
             }
             
             this.colunasCriadas = telaColuna.getColunas();
@@ -351,14 +365,22 @@ public class TelaCriar extends javax.swing.JFrame {
             
             String nomeTabela = txtNome.getText();
             Tabela tabelaCriada = new Tabela(nomeTabela, colunasCriadas);
-            tabelas.add(tabelaCriada);
+            tabelasParaSalvar.add(tabelaCriada);
             
             System.out.println("Tabela salva: " + tabelaCriada);
             System.out.println("Colunas salvas: " + tabelaCriada.getColunas());
             
-            ManipuladorIOFiles.gravarArquivo("tabelas.dat", tabelas, false);
+            try {
+                ManipuladorIOFiles.gravarArquivo("tabelas.dat", tabelasParaSalvar, false);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Não foi possível salvar o arquivo");
+            }
            
             this.dispose();
+        } catch (Exception ex) {
+                Logger.getLogger(TelaCriar.class.getName()).log(Level.SEVERE,null, ex);
+                
+            }
         }
         
     }//GEN-LAST:event_btnSalvarActionPerformed

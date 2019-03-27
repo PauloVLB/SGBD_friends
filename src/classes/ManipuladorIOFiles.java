@@ -6,6 +6,8 @@
 package classes;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 /**
  *
@@ -15,9 +17,28 @@ import javax.swing.JOptionPane;
  */
 public class ManipuladorIOFiles {
     public static void criarArquivo(String nomeArquivo){
-        gravarArquivo(nomeArquivo, new ArrayList<Tabela>(), true);
+        try {
+            gravarArquivo(nomeArquivo, new ArrayList<Tabela>(), false);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Não foi possível salvar o arquivo");
+        }
     }
-    public static void gravarArquivo(String nome, ArrayList<Tabela> tabelas, boolean trunca){
+    
+    public static boolean exists(String nome) throws Exception {
+        
+        try {
+            FileInputStream fis = new FileInputStream(nome);
+            fis.close();
+            
+            return true;
+            
+        } catch (Exception e) {
+            throw e;
+        }
+        
+    }
+    
+    public static void gravarArquivo(String nome, ArrayList<Tabela> tabelas, boolean trunca) throws Exception {
         try{
             FileOutputStream fos = new FileOutputStream(nome, trunca);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -27,11 +48,11 @@ public class ManipuladorIOFiles {
             oos.close();
             fos.close();
         }catch (Exception e){
-            JOptionPane.showMessageDialog(null, "Não foi possível salvar o arquivo");
+            throw e;
         }
     }
     
-    public static ArrayList<Tabela> lerArquivoTabela(String nome){
+    public static ArrayList<Tabela> lerArquivoTabela(String nome) throws Exception{
         try{
             FileInputStream fis = new FileInputStream(nome);
             ObjectInputStream ois = new ObjectInputStream(fis);
@@ -44,12 +65,8 @@ public class ManipuladorIOFiles {
             return tabelas;
             
         }catch(Exception e){
-            e.printStackTrace();
+             throw e; 
         }
-       
-        return null;
-        
     }
-    
     
 }

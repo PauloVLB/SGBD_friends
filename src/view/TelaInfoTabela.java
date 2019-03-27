@@ -21,20 +21,48 @@ public class TelaInfoTabela extends javax.swing.JFrame {
     
     private Tabela tabela;
     private ArrayList<Coluna> colunas;
+    private ArrayList<String[]> linhas;
     
-    public TelaInfoTabela(Tabela tabela, ArrayList<Coluna> colunas) {
+    public TelaInfoTabela(Tabela tabela) {
         
         initComponents();
         
         txtInfo.setText(txtInfo.getText() + tabela.getNome());
         
         this.tabela = tabela;
-        this.colunas = colunas;
-        
-        TableModel tm = table.getModel();
+        this.colunas = tabela.getColunas();
+        this.linhas = tabela.getLinhas();
+       
+        /*TableModel tm = table.getModel();
         DefaultTableModel modelo = (DefaultTableModel) tm;
-        readJTable();
+        readJTable();*/
         
+        // transformando ArrayList<String> colunas em String[]
+        String[] colunasString = new String[colunas.size()];
+
+        int i = 0;
+        for (Coluna coluna : colunas) {
+            colunasString[i++] = coluna.getNome();
+        }
+
+        // transformando ArrayList<String[]> linhas em Object[][]
+        Object[][] linhasObject = new Object[linhas.size()][colunas.size()];
+
+        int l = 0;
+        int c = 0;
+        for (String[] linha : linhas) {
+            for (String linhaDado : linha) {
+                System.out.println("linhaDado: " + linhaDado);
+                linhasObject[l][c++] = linhaDado;
+            }
+            c = 0;
+            ++l;
+        }
+
+        table.setModel(new javax.swing.table.DefaultTableModel(
+                linhasObject,
+                colunasString
+        ));
     }
     
     public TelaInfoTabela() {
@@ -42,6 +70,7 @@ public class TelaInfoTabela extends javax.swing.JFrame {
         
     }
     
+    /*
     private void readJTable() {
         DefaultTableModel modelo = (DefaultTableModel) table.getModel();
         modelo.setNumRows(0);
@@ -53,15 +82,15 @@ public class TelaInfoTabela extends javax.swing.JFrame {
             
         }
         
-        /*
+        
         for (Linha linha : linhas) {
         
             modelo.addRow(linha.getDados());
         
         }
-        */
         
-    }
+        
+    }*/
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -197,7 +226,7 @@ public class TelaInfoTabela extends javax.swing.JFrame {
     private javax.swing.JLabel txtInfo;
     // End of variables declaration//GEN-END:variables
 
-    private void listarColunas() {
+    /*private void listarColunas() {
         
         int qntColunas = colunas.size();
         
@@ -221,5 +250,5 @@ public class TelaInfoTabela extends javax.swing.JFrame {
                 rows,
                 colunasTable
         ));
-    }
+    }*/
 }
