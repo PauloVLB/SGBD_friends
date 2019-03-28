@@ -7,7 +7,6 @@ package view;
 
 import classes.*;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
 import javax.swing.table.*;
 
 /**
@@ -28,11 +27,6 @@ public class TelaInfoTabela extends javax.swing.JFrame {
         
         initComponents();
         
-        /*
-        table.setEnabled(true);
-        table.setRowSelectionAllowed(false);
-        table.setColumnSelectionAllowed(true);*/
-        
         txtInfo.setText(txtInfo.getText() + tabela.getNome());
         
         this.tabela = tabela;
@@ -48,10 +42,8 @@ public class TelaInfoTabela extends javax.swing.JFrame {
 
         int i = 0;
         for (Coluna coluna : colunas) {
-            colunasString[i++] = coluna.getNome() + " : " + coluna.getTipo();
+            colunasString[i++] = coluna.getNome();
         }
-        
-        boxColuna.setModel(new javax.swing.DefaultComboBoxModel<>(colunasString));
 
         // transformando ArrayList<String[]> linhas em Object[][]
         Object[][] linhasObject = new Object[linhas.size()][colunas.size()];
@@ -77,7 +69,28 @@ public class TelaInfoTabela extends javax.swing.JFrame {
         initComponents();
         
     }
-   
+    
+    /*
+    private void readJTable() {
+        DefaultTableModel modelo = (DefaultTableModel) table.getModel();
+        modelo.setNumRows(0);
+        //String[] tupla = null;
+        
+        for (Coluna coluna : colunas) {
+            
+            modelo.addColumn(coluna.getNome());
+            
+        }
+        
+        
+        for (Linha linha : linhas) {
+        
+            modelo.addRow(linha.getDados());
+        
+        }
+        
+        
+    }*/
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -88,23 +101,11 @@ public class TelaInfoTabela extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
         panel = new javax.swing.JPanel();
         btnVoltar = new javax.swing.JButton();
         txtInfo = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
-        lblPesquisar = new javax.swing.JLabel();
-        txtFValor = new javax.swing.JTextField();
-        boxColuna = new javax.swing.JComboBox<>();
-        lblEm = new javax.swing.JLabel();
-        btnPesquisar = new javax.swing.JButton();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -133,21 +134,6 @@ public class TelaInfoTabela extends javax.swing.JFrame {
         table.setEnabled(false);
         jScrollPane2.setViewportView(table);
 
-        lblPesquisar.setText("Pesquisa:");
-
-        boxColuna.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        lblEm.setText("em");
-
-        btnPesquisar.setBackground(new java.awt.Color(255, 255, 255));
-        btnPesquisar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnPesquisar.setText("Pesquisar");
-        btnPesquisar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPesquisarActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
         panel.setLayout(panelLayout);
         panelLayout.setHorizontalGroup(
@@ -155,52 +141,34 @@ public class TelaInfoTabela extends javax.swing.JFrame {
             .addGroup(panelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtInfo)
-                    .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnVoltar)
-                        .addGroup(panelLayout.createSequentialGroup()
-                            .addComponent(lblPesquisar)
-                            .addGap(3, 3, 3)
-                            .addComponent(txtFValor, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(lblEm)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(boxColuna, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(btnPesquisar)))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 88, Short.MAX_VALUE)
-                .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(28, 28, 28))
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addComponent(txtInfo)
+                        .addContainerGap(331, Short.MAX_VALUE))
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         panelLayout.setVerticalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addComponent(txtInfo)
-                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelLayout.createSequentialGroup()
-                        .addGap(95, 95, 95)
-                        .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)))
-                .addGap(28, 28, 28)
-                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblPesquisar)
-                    .addComponent(txtFValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(boxColuna, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblEm)
-                    .addComponent(btnPesquisar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(21, 21, 21))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24)
+                .addComponent(btnVoltar)
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -210,21 +178,10 @@ public class TelaInfoTabela extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
-        String valorDigitado = txtFValor.getText();
-
-        if(valorDigitado != null){
-            try{
-                tipoCorreto(valorDigitado, colunas.get(boxColuna.getSelectedIndex()));
-            }catch(Exception e){
-                JOptionPane.showMessageDialog(null, "Insira o tipo de dados da coluna!");
-            }
-        }
-    }//GEN-LAST:event_btnPesquisarActionPerformed
-
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
 
         this.dispose();
+
     }//GEN-LAST:event_btnVoltarActionPerformed
 
     /**
@@ -263,51 +220,36 @@ public class TelaInfoTabela extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> boxColuna;
-    private javax.swing.JButton btnPesquisar;
     private javax.swing.JButton btnVoltar;
-    private javax.swing.Box.Filler filler1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JLabel lblEm;
-    private javax.swing.JLabel lblPesquisar;
     private javax.swing.JPanel panel;
     private javax.swing.JTable table;
-    private javax.swing.JTextField txtFValor;
     private javax.swing.JLabel txtInfo;
     // End of variables declaration//GEN-END:variables
 
-    
-    private void tipoCorreto(String valorLido, Coluna coluna) throws Exception {
+    /*private void listarColunas() {
         
-        String tipoColuna = coluna.getTipo();
+        int qntColunas = colunas.size();
         
-        switch (tipoColuna) {
-            case "Int":
-            case "int":
-                try {
-                    int num = Integer.valueOf(valorLido);
-                } catch (Exception e) {
-                    throw e;
-                } 
-                break;
-            case "Boolean":
-            case "boolean":
-                if(!(valorLido.equalsIgnoreCase("true") || 
-                        valorLido.equalsIgnoreCase("false"))) {
-                    Exception e = new Exception();
-                    throw e;
-                }
-                break;
-            case "Double":
-            case "double":
-                try {
-                    double dob = Double.valueOf(valorLido);
-                }  catch (Exception e) {
-                    throw e;
-                }
-                break;
+        String[] colunasTable = new String[qntColunas];
+        
+        int i = 0;
+        for (Coluna coluna : colunas) {
+            
+            colunasTable[i] = coluna.getNome();
+            
+            System.out.println(colunasTable[i]);
+            
+            ++i;
         }
-    }
+        
+        Object[][] rows = new Object[1][1];
+        
+        rows[0][0] = "pao";
+        
+        table.setModel(new javax.swing.table.DefaultTableModel(
+                rows,
+                colunasTable
+        ));
+    }*/
 }
