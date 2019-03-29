@@ -244,21 +244,7 @@ public class TelaInfoTabela extends javax.swing.JFrame {
                         break;
                     case "int":
                     case "double":
-                        String linhaConcatenada = "";
-                        for (String[] linha : linhas) {
-                            for (String linhaDado : linha) {
-                                try {
-                                    double linhaDadoDob = Double.parseDouble(linhaDado);
-                                    double valorLidoDob = Double.parseDouble(linhaDado);
-                                    
-                                    if (linhaDadoDob == valorLidoDob) {
-                                        achouDado = true;
-                                        linhasBuffered.add(linha);
-                                    }
-                                } catch(Exception e) {}
-                            }
-                        }
-                        
+                        ArrayList<Double> elementosColuna = getElementosColuna();
                         
                         
                         break;
@@ -372,5 +358,17 @@ public class TelaInfoTabela extends javax.swing.JFrame {
                 linhasObject,
                 colunasString
         ));
+   }
+   
+   private ArrayList<Double> getElementosColuna(){
+       ArrayList<Double> elementosColuna = new ArrayList<>();
+       for (String[] linha : linhas) {
+           for (int i = 0; i < linha.length; i++) {
+               if (i == boxColuna.getSelectedIndex()) {
+                   elementosColuna.add(Double.parseDouble(linha[i]));
+               }
+           }
+       }
+       return elementosColuna;
    }
 }
