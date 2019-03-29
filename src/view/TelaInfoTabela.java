@@ -205,6 +205,7 @@ public class TelaInfoTabela extends javax.swing.JFrame {
         boolean empty = valorLido.equals("");
         
         boolean achouDado = false;
+        boolean foiDouble = false;
         
         if (empty) {
             JOptionPane.showMessageDialog(null, "Preencha todos os campos!");
@@ -257,9 +258,10 @@ public class TelaInfoTabela extends javax.swing.JFrame {
                         }
                         
                         if (linhasBuffered.size() > 0) { // ACHOU LINHAS
-                            achouDado = true;
-                            new TelaComparacoesValores(tabela, new ArrayList<>(linhasBuffered), doublesColuna,valorAchado).setVisible(true);
+                            achouDado = true;  
                         } 
+                        foiDouble = true;
+                        new TelaComparacoesValores(tabela, new ArrayList<>(linhasBuffered), doublesColuna,valorLidoDob).setVisible(true);
                         
                         linhasBuffered.clear();
                         
@@ -270,13 +272,13 @@ public class TelaInfoTabela extends javax.swing.JFrame {
             }
                
             if(achouDado){
-                
                 linhasBuffered.clear();
-                jaBuscou = true;
+                if (!foiDouble) jaBuscou = true;
                 
-            } else {
+            } else if(!foiDouble) {
                 clear();
                 JOptionPane.showMessageDialog(null, "Nada foi encontrado.");
+                
             }
                      
         }

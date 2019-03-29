@@ -257,7 +257,7 @@ public class TelaColuna extends javax.swing.JFrame {
                 getTipo.setEnabled(false);
                 qntColunas++;
             }else{
-                JOptionPane.showMessageDialog(null, "Todas as colunas foram criadas!");
+                JOptionPane.showMessageDialog(null, "Todas as colunas foram criadas! \nClique SALVAR para salvá-las.");
                 this.dispose();
             }
         }

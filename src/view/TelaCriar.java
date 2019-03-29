@@ -335,7 +335,7 @@ public class TelaCriar extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCriarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        if(!txtNome.getText().equals("") && (colunasCriadas.size() > 0)){             
+        if(!txtNome.getText().equals("") || (colunasCriadas.size() > 0)){             
             try { // qnd nao vazio
             
                 ArrayList<Tabela> tabelasExistentes = null;
