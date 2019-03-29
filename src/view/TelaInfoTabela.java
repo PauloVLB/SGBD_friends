@@ -5,8 +5,10 @@
  */
 package view;
 
+import classes.ManipuladorTabelas;
 import classes.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import javax.swing.JOptionPane;
 import javax.swing.table.*;
 
@@ -25,11 +27,7 @@ public class TelaInfoTabela extends javax.swing.JFrame {
     private ArrayList<String[]> linhas;
     private ArrayList<String[]> linhasBuffered;
     
-    // Conversoes 
-    private String[] colunasString; 
-
     private boolean jaBuscou;
-        
     
     public TelaInfoTabela(Tabela tabela) {
         
@@ -37,27 +35,26 @@ public class TelaInfoTabela extends javax.swing.JFrame {
         
         txtInfo.setText(txtInfo.getText() + tabela.getNome());
         
-        this.linhasBuffered = new ArrayList<>();
+       
         this.tabela = tabela;
         this.colunas = tabela.getColunas();
         this.linhas = tabela.getLinhas();
         
-        colunasString = new String[colunas.size()];
+        this.linhasBuffered = new ArrayList<>();
         
-        //String[] colunasStringTipo = new String[colunas.size()];
+        // CONVERTENDO COLUNAS PARA VETOR DE STRING
+        String[] colunasString = new String[colunas.size()];
 
         int i = 0;
         for (Coluna coluna : colunas) {
             colunasString[i] = coluna.getNome();
-            //colunasStringTipo[i] = coluna.getNome() + " : " + coluna.getTipo();
             ++i;
         }
         
-        //boxColuna.setModel(new javax.swing.DefaultComboBoxModel<>(colunasStringTipo));
-        boxColuna.setModel(new javax.swing.DefaultComboBoxModel<>(colunasString));
+        ManipuladorTabelas.parseToTable(jTable, colunas, linhas);
         
-        toArrayObject(linhas);
-
+        //boxColuna.setModel(new javax.swing.DefaultComboBoxModel<>(colunasStringTipo));
+        boxColuna.setModel(new javax.swing.DefaultComboBoxModel<>(ManipuladorTabelas.parseToStringVector(colunas)));
         
     }
     
@@ -79,7 +76,7 @@ public class TelaInfoTabela extends javax.swing.JFrame {
         btnVoltar = new javax.swing.JButton();
         txtInfo = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        table = new javax.swing.JTable();
+        jTable = new javax.swing.JTable();
         lblEm = new javax.swing.JLabel();
         lblPesquisar = new javax.swing.JLabel();
         boxColuna = new javax.swing.JComboBox<>();
@@ -87,6 +84,7 @@ public class TelaInfoTabela extends javax.swing.JFrame {
         btnBuscar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Tabelas");
 
         panel.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -102,7 +100,7 @@ public class TelaInfoTabela extends javax.swing.JFrame {
         txtInfo.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txtInfo.setText("Tabela: ");
 
-        table.setModel(new javax.swing.table.DefaultTableModel(
+        jTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -110,8 +108,8 @@ public class TelaInfoTabela extends javax.swing.JFrame {
 
             }
         ));
-        table.setEnabled(false);
-        jScrollPane2.setViewportView(table);
+        jTable.setEnabled(false);
+        jScrollPane2.setViewportView(jTable);
 
         lblEm.setText("em");
 
@@ -190,7 +188,7 @@ public class TelaInfoTabela extends javax.swing.JFrame {
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
         
         if (jaBuscou) {
-            toArrayObject(linhas);
+            ManipuladorTabelas.parseToTable(jTable, colunas, linhas);
             jaBuscou = false;
         } else {
             this.dispose();
@@ -200,67 +198,85 @@ public class TelaInfoTabela extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVoltarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        
         String valorLido = txtFValor.getText();
         Coluna colunaSelected = this.colunas.get(boxColuna.getSelectedIndex());
-        ArrayList<String> achados = new ArrayList<>();
-        ArrayList<Integer> linhasAchados = new ArrayList<>();
+        
         boolean empty = valorLido.equals("");
         
-        
         boolean achouDado = false;
-        
         
         if (empty) {
             JOptionPane.showMessageDialog(null, "Preencha todos os campos!");
         } else {            
             try {
-                tipoCorreto(valorLido, colunaSelected);
-                
                 switch (colunaSelected.getTipo().toLowerCase()) {
                     case "string":
                     case "boolean":
-                        int index = 0;
-                        for (String[] linha : linhas) {
+                        
+                        ArrayList<String> stringColunas = getStringColuna();
+                        
+                        tipoCorreto(valorLido, colunaSelected);
+                        
+                        int i = 0;
+                        for (String txt : stringColunas) { // PEGAS AS LINHAS QUE CONTÉM VALOR LIDO
                             
-                            for (String linhaDado : linha) {
-
-                                achouDado = linhaDado.toLowerCase().contains(valorLido.toLowerCase());
-                                if (achouDado) {
-                                    achados.add(linhaDado);
-                                    linhasAchados.add(index);
-                                    linhasBuffered.add(linhas.get(index));
-                                }
-                               
-                                
+                            if (txt.toLowerCase().contains(valorLido.toLowerCase())) {
+                                linhasBuffered.add(linhas.get(i));
                             }
-                            
-                            if(achados.size() > 0){
-                                achouDado = true;
-                            }
-                            ++index;
-                           
+                            ++i;
                         }
                         
+                        if (linhasBuffered.size() > 0) { // ACHOU LINHAS
+                            achouDado = true;
+                            ManipuladorTabelas.parseToTable(jTable, colunas, linhasBuffered);
+                        } 
+                        
+                        linhasBuffered.clear();
+                        
                         break;
+                        
                     case "int":
                     case "double":
-                        ArrayList<Double> elementosColuna = getElementosColuna();
+                        ArrayList<Double> doublesColuna = getDoublesColuna();
                         
+                        double valorAchado = 0;
+                        
+                        tipoCorreto(valorLido, colunaSelected);
+                        
+                        double valorLidoDob = Double.parseDouble(valorLido); // filtra valores invalidos
+                        
+                        int j = 0;
+                        for (Double num : doublesColuna) { // PEGAS AS LINHAS QUE CONTÉM VALOR LIDO
+                            
+                            if (num.equals(valorLidoDob)) {
+                                linhasBuffered.add(linhas.get(j));
+                                valorAchado = num.doubleValue();
+                            }
+                            ++j;
+                        }
+                        
+                        if (linhasBuffered.size() > 0) { // ACHOU LINHAS
+                            achouDado = true;
+                            new TelaComparacoesValores(tabela, new ArrayList<>(linhasBuffered), doublesColuna,valorAchado).setVisible(true);
+                        } 
+                        
+                        linhasBuffered.clear();
                         
                         break;
                 }
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Insira valor do tipo <" + colunaSelected.getTipo() + ">");
-                e.printStackTrace();
             }
                
             if(achouDado){
-
-                toArrayObject(linhasBuffered);
-                linhasBuffered.clear();
                 
+                linhasBuffered.clear();
                 jaBuscou = true;
                 
+            } else {
+                clear();
+                JOptionPane.showMessageDialog(null, "Nada foi encontrado.");
             }
                      
         }
@@ -306,10 +322,10 @@ public class TelaInfoTabela extends javax.swing.JFrame {
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnVoltar;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTable;
     private javax.swing.JLabel lblEm;
     private javax.swing.JLabel lblPesquisar;
     private javax.swing.JPanel panel;
-    private javax.swing.JTable table;
     private javax.swing.JTextField txtFValor;
     private javax.swing.JLabel txtInfo;
     // End of variables declaration//GEN-END:variables
@@ -337,30 +353,7 @@ public class TelaInfoTabela extends javax.swing.JFrame {
         }
     }
     
-    
-   private void toArrayObject(ArrayList<String[]> linhasLidas ){
-        Object[][] linhasObject = new Object[linhasLidas.size()][colunas.size()];
-        
-        int l = 0;
-        int c = 0;
-        for (String[] linha : linhasLidas) {
-            for (String linhaDado : linha) {
-                //System.out.println("linhaDado: " + linhaDado);
-                linhasObject[l][c++] = linhaDado;
-            }
-            c = 0;
-            ++l;
-        }
-        
-        table.removeAll();
-        
-        table.setModel(new javax.swing.table.DefaultTableModel(
-                linhasObject,
-                colunasString
-        ));
-   }
-   
-   private ArrayList<Double> getElementosColuna(){
+   private ArrayList<Double> getDoublesColuna(){
        ArrayList<Double> elementosColuna = new ArrayList<>();
        for (String[] linha : linhas) {
            for (int i = 0; i < linha.length; i++) {
@@ -371,4 +364,21 @@ public class TelaInfoTabela extends javax.swing.JFrame {
        }
        return elementosColuna;
    }
+   
+   private ArrayList<String> getStringColuna(){
+       ArrayList<String> elementosColuna = new ArrayList<>();
+       for (String[] linha : linhas) {
+           for (int i = 0; i < linha.length; i++) {
+               if (i == boxColuna.getSelectedIndex()) {
+                   elementosColuna.add(linha[i]);
+               }
+           }
+       }
+       return elementosColuna;
+   }
+
+    private void clear() {
+        txtFValor.setText("");
+        boxColuna.setSelectedIndex(0);
+    }
 }
