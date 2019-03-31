@@ -9,6 +9,8 @@ import classes.*;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -22,7 +24,8 @@ public class TelaListar extends javax.swing.JFrame {
      */
     
     private ArrayList<Tabela> tabelas;
-    private Tabela tabelaSelected;
+    private ArrayList<Tabela> tabelasSelected;
+    private boolean listouTabelas;
     
     public TelaListar() {
         initComponents();
@@ -32,8 +35,7 @@ public class TelaListar extends javax.swing.JFrame {
         try {
             ArrayList<Tabela> tabelasImutavel = ManipuladorIOFiles.lerArquivoTabela("tabelas.dat");
             this.tabelas = tabelasImutavel;
-            System.out.println(tabelas);
-            tabelaSelected = new Tabela();
+            tabelasSelected = new ArrayList<Tabela>();
         
             listarTabelas();
         } catch (Exception e) {
@@ -59,6 +61,7 @@ public class TelaListar extends javax.swing.JFrame {
         txtInfo = new javax.swing.JLabel();
         btnVer = new javax.swing.JButton();
         btnAddLinha = new javax.swing.JButton();
+        btnRemover = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -97,13 +100,24 @@ public class TelaListar extends javax.swing.JFrame {
             }
         });
 
+        btnRemover.setBackground(new java.awt.Color(255, 255, 255));
+        btnRemover.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnRemover.setText("Remover");
+        btnRemover.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoverActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
         panel.setLayout(panelLayout);
         panelLayout.setHorizontalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(84, 84, 84)
                 .addComponent(btnAddLinha)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnRemover)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnVer)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -112,7 +126,7 @@ public class TelaListar extends javax.swing.JFrame {
             .addGroup(panelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(txtInfo)
-                .addContainerGap(241, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         panelLayout.setVerticalGroup(
@@ -126,7 +140,8 @@ public class TelaListar extends javax.swing.JFrame {
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVoltar)
                     .addComponent(btnVer)
-                    .addComponent(btnAddLinha))
+                    .addComponent(btnAddLinha)
+                    .addComponent(btnRemover))
                 .addContainerGap(26, Short.MAX_VALUE))
         );
 
@@ -159,12 +174,14 @@ public class TelaListar extends javax.swing.JFrame {
         }
         else {
             
-            setTabelaSelected();
+            setTabelasSelected();
             
-            ArrayList<Coluna> colunas = tabelaSelected.getColunas();
+            listouTabelas = true; // usar para nao encher os tabelasSelected
             
-            new TelaInfoTabela(tabelaSelected).setVisible(true);
-        
+            for (Tabela tabela : tabelasSelected) {
+                new TelaInfoTabela(tabela).setVisible(true);
+            }
+            
         }
         
     }//GEN-LAST:event_btnVerActionPerformed
@@ -173,11 +190,63 @@ public class TelaListar extends javax.swing.JFrame {
         if (list.isSelectionEmpty()) {
             JOptionPane.showMessageDialog(null, "Selecione uma tabela!");
         } else {
-            setTabelaSelected();
-            new TelaLinha(tabelaSelected).setVisible(true);
+            setTabelasSelected();
+            
+            listouTabelas = true; // usar para nao encher os tabelasSelected
+            
+            for (Tabela tabela : tabelasSelected) {
+                new TelaLinha(tabela).setVisible(true);
+            }
+            
         }
     }//GEN-LAST:event_btnAddLinhaActionPerformed
+
+    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
+        if (list.isSelectionEmpty()) {
+            JOptionPane.showMessageDialog(null, "Selecione uma tabela!");
+        } else {
+            int resposta = JOptionPane.showConfirmDialog( null,"Confirma remoção da(s) tabela(s)?", "Remoção",JOptionPane.YES_NO_OPTION);
+            
+            setTabelasSelected();
+            
+            listouTabelas = true; // usar para nao encher os tabelasSelected
+            
+            if (resposta == 0) { // SIM
+                removerTabelas();
+            }
+        }
+    }//GEN-LAST:event_btnRemoverActionPerformed
+    
+    private void removerTabelas() {
+    
+        try {
+            ArrayList<Tabela> tabelasExistentes = ManipuladorIOFiles.lerArquivoTabela("tabelas.dat");
         
+            try {
+                
+                for (Tabela tabela: tabelasSelected) {
+                    tabelasExistentes.remove(tabela);
+                }
+            
+                ManipuladorIOFiles.gravarArquivo("tabelas.dat", tabelasExistentes, false);
+                
+                JOptionPane.showMessageDialog(null, "Tabela(s) removida(s) com sucesso!");
+                
+                this.tabelas = tabelasExistentes;
+                
+                listarTabelas();
+                
+            } catch(Exception e) {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar remover a tabela.");
+            }
+            
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Não foi possível ler o arquivo");
+        }
+        
+        
+        
+    }
     
         
     /**
@@ -232,6 +301,7 @@ public class TelaListar extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddLinha;
+    private javax.swing.JButton btnRemover;
     private javax.swing.JButton btnVer;
     private javax.swing.JButton btnVoltar;
     private javax.swing.JScrollPane jScrollPane1;
@@ -240,15 +310,23 @@ public class TelaListar extends javax.swing.JFrame {
     private javax.swing.JLabel txtInfo;
     // End of variables declaration//GEN-END:variables
 
-    private void setTabelaSelected() {
-        String nomeTabelaSelected = list.getSelectedValue();
-        for (Tabela tabela : tabelas) {
-
-            if (tabela.getNome().equals(nomeTabelaSelected)) {
-                tabelaSelected = tabela;
-            }
-
+    private void setTabelasSelected() {
+        
+        if(listouTabelas) {
+            tabelasSelected.clear();
+            listouTabelas = false;
         }
+        
+        for (Tabela tabela : tabelas) {
+            
+            for (String selected : list.getSelectedValuesList()) {
+                
+                if (tabela.getNome().equalsIgnoreCase(selected)) {
+                    tabelasSelected.add(tabela);
+                }
+            }
+        }   
+        
     }
 
 
