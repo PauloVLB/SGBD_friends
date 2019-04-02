@@ -26,6 +26,8 @@ public class TelaInfoTabela extends javax.swing.JFrame {
     private ArrayList<Coluna> colunas;
     private ArrayList<String[]> linhas;
     private ArrayList<String[]> linhasBuffered;
+    private String chavePrimaria;
+    private String colunaSelected;
     
     private boolean jaBuscou;
     
@@ -48,6 +50,7 @@ public class TelaInfoTabela extends javax.swing.JFrame {
         int i = 0;
         for (Coluna coluna : colunas) {
             colunasString[i] = coluna.getNome();
+            if (coluna.isChavePrimaria()) chavePrimaria = coluna.getNome();
             ++i;
         }
         
@@ -82,6 +85,7 @@ public class TelaInfoTabela extends javax.swing.JFrame {
         boxColuna = new javax.swing.JComboBox<>();
         txtFValor = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
+        btnRemoveLinha = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Tabelas");
@@ -116,6 +120,11 @@ public class TelaInfoTabela extends javax.swing.JFrame {
         lblPesquisar.setText("Pesquisa:");
 
         boxColuna.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        boxColuna.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boxColunaActionPerformed(evt);
+            }
+        });
 
         btnBuscar.setBackground(new java.awt.Color(255, 255, 255));
         btnBuscar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -123,6 +132,15 @@ public class TelaInfoTabela extends javax.swing.JFrame {
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarActionPerformed(evt);
+            }
+        });
+
+        btnRemoveLinha.setBackground(new java.awt.Color(255, 255, 255));
+        btnRemoveLinha.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnRemoveLinha.setText("Remover Linha");
+        btnRemoveLinha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveLinhaActionPerformed(evt);
             }
         });
 
@@ -138,6 +156,7 @@ public class TelaInfoTabela extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(panelLayout.createSequentialGroup()
                         .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(panelLayout.createSequentialGroup()
                                 .addComponent(lblPesquisar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -147,10 +166,12 @@ public class TelaInfoTabela extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(boxColuna, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnBuscar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnVoltar))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(panelLayout.createSequentialGroup()
+                                        .addComponent(btnBuscar)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnVoltar))
+                                    .addComponent(btnRemoveLinha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(0, 4, Short.MAX_VALUE))))
         );
         panelLayout.setVerticalGroup(
@@ -168,7 +189,9 @@ public class TelaInfoTabela extends javax.swing.JFrame {
                     .addComponent(boxColuna, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtFValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBuscar))
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addComponent(btnRemoveLinha)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -284,6 +307,54 @@ public class TelaInfoTabela extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
+    private void btnRemoveLinhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveLinhaActionPerformed
+        
+        String chaveString = txtFValor.getText();
+        boolean empty = chaveString.equals("");
+        boolean achouDado = false;
+        
+        if (empty) {
+            JOptionPane.showMessageDialog(null, "Preencha todos os campos!");
+        }else{
+            try {
+                double chaveInt = Integer.parseInt(chaveString);
+                
+                ArrayList<Double> colunaChaves = getDoublesColuna();
+                
+                int j = 0;
+                int indexLinha = 0;
+                for (Double num : colunaChaves) { // PEGAS AS LINHAS QUE CONTÉM VALOR LIDO
+                    if (num.equals(chaveInt)) {
+                        linhasBuffered.add(linhas.get(j));
+                        indexLinha = j;
+                    }
+                    ++j;
+                }
+                
+                if (linhasBuffered.size() > 0) { // ACHOU LINHAS
+                    achouDado = true;
+                }
+                
+                if(achouDado) removeLinha(indexLinha);
+                else JOptionPane.showMessageDialog(null, "Chave inexistente!");
+                    
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "O valor deve ser do tipo inteiro!");
+            }
+        }
+    }//GEN-LAST:event_btnRemoveLinhaActionPerformed
+
+    private void boxColunaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxColunaActionPerformed
+        this.colunaSelected = (String) boxColuna.getSelectedItem();
+        
+        if(this.colunaSelected.equals(chavePrimaria)){
+            btnRemoveLinha.setEnabled(true);
+        }else{
+            btnRemoveLinha.setEnabled(false);
+        }
+    }//GEN-LAST:event_boxColunaActionPerformed
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -322,6 +393,7 @@ public class TelaInfoTabela extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> boxColuna;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnRemoveLinha;
     private javax.swing.JButton btnVoltar;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable;
@@ -378,9 +450,51 @@ public class TelaInfoTabela extends javax.swing.JFrame {
        }
        return elementosColuna;
    }
+   
+   /*private ArrayList<Integer> getColunaPrimaria(){
+       ArrayList<Integer> chavePrimarias = new ArrayList<>();
+       
+       return null;
+   }*/
 
     private void clear() {
         txtFValor.setText("");
         boxColuna.setSelectedIndex(0);
+    }
+    
+    private void removeLinha(int indexLinha) throws Exception{
+        int confirm = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja remover essa linha?");
+
+        if (confirm == 0) {
+            try {
+                ArrayList<Tabela> tabelasExistentes = ManipuladorIOFiles.lerArquivoTabela("tabelas.dat");
+                ArrayList<Tabela> novasTabelas = new ArrayList<>();
+
+                for (Tabela t : tabelasExistentes) {
+                    if (t.equals(this.tabela)) {
+                        t.getLinhas().remove(indexLinha);
+                        System.out.println(t.getLinhas());
+                        this.tabela = t;
+                        this.colunas = t.getColunas();
+                        this.linhas = t.getLinhas();
+                    }
+                    novasTabelas.add(t);
+                }
+
+                JOptionPane.showMessageDialog(null, "Linha removida com sucesso!");
+
+                ManipuladorIOFiles.gravarArquivo("tabelas.dat", novasTabelas, false);
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Não foi possivel ler o arquivo! ");
+            }
+        }
+
+        ArrayList<Tabela> tabelasExistentes = ManipuladorIOFiles.lerArquivoTabela("tabelas.dat");
+        System.out.println(linhas);
+        ManipuladorTabelas.parseToTable(jTable, colunas, linhas);
+
+        linhasBuffered.clear();
+
     }
 }

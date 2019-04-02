@@ -11,11 +11,17 @@ import java.util.ArrayList;
 
 public class TesteLegal {
     public static void main(String[] args) {
+        String[] a =  {"a", "d", "s"};
+        String[] b =  {"c", "s", "h"};
         
-        String[] a = {"a", "b", "c", "d", "e", "f"};
+        ArrayList<String[]> arr = new ArrayList<>();
         
-        for(int i = 0; i < a.length && i%2 == 0; i++){
-            System.out.println(a[i]);
-        }
+        arr.add(a);
+        arr.add(b);
+        
+        String[] d =  {"a", "d", "s"};
+        arr.remove(d);
+        System.out.println(arr);
+        
     }
 }

@@ -72,6 +72,11 @@ public class Tabela implements Serializable{
         linhas.add(linhaString);
     }
     
+    public void removeLinha(String[] linha){
+        this.linhas.remove(linha);
+        setLinhas(linhas);
+        System.out.println(linhas);
+    }
     public void setLinhas(ArrayList<String[]> linhas) {
         this.linhas = linhas;
     }
