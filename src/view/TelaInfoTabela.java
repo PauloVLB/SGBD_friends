@@ -54,6 +54,14 @@ public class TelaInfoTabela extends javax.swing.JFrame {
             ++i;
         }
         
+        this.colunaSelected = (String) boxColuna.getSelectedItem();
+
+        if (this.colunaSelected.equals(chavePrimaria)) {
+            btnRemoveLinha.setEnabled(true);
+        } else {
+            btnRemoveLinha.setEnabled(false);
+        }
+        
         ManipuladorTabelas.parseToTable(jTable, colunas, linhas);
         
         //boxColuna.setModel(new javax.swing.DefaultComboBoxModel<>(colunasStringTipo));
@@ -198,11 +206,11 @@ public class TelaInfoTabela extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
