@@ -9,7 +9,10 @@ import classes.ManipuladorIOFiles;
 
 /**
  *
+ * @author paulo
+ * @author douglas
  * @author isaacmsl
+ * 
  */
 public class TelaPrincipal extends javax.swing.JFrame {
 
