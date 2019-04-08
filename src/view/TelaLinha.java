@@ -7,7 +7,6 @@ package view;
 
 import classes.*;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -27,11 +26,9 @@ public class TelaLinha extends javax.swing.JFrame {
     private Tabela tabela;
     private int indexArray;
     private ArrayList<String> tupla;
-    private int indexColunaPrimaria;
-    private ArrayList<String> chavesPrimarias;
     
     public TelaLinha(Tabela tabela) {
-        chavesPrimarias = new ArrayList();
+        
         initComponents();
         this.tabela = tabela;
         colunas = this.tabela.getColunas();
@@ -39,17 +36,8 @@ public class TelaLinha extends javax.swing.JFrame {
         tupla = new ArrayList<>();
         
         showColuna(colunas.get(indexArray));
-        int index = 0;
-        for(Coluna c : colunas){
-            if(c.isChavePrimaria()){
-               indexColunaPrimaria = index; 
-            }
-            index++;
-        }
-         for(String[] linhas : tabela.getLinhas()){
-             chavesPrimarias.add(linhas[indexColunaPrimaria]);
-         }           
-    } 
+        
+    }
     
     public TelaLinha() {
         initComponents();
@@ -74,7 +62,6 @@ public class TelaLinha extends javax.swing.JFrame {
         btnLimpar = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
         txtColuna = new javax.swing.JLabel();
-        btnGerarChave = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -165,15 +152,6 @@ public class TelaLinha extends javax.swing.JFrame {
 
         txtColuna.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
-        btnGerarChave.setBackground(new java.awt.Color(255, 255, 255));
-        btnGerarChave.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnGerarChave.setText("Gerar chave");
-        btnGerarChave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGerarChaveActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
         panel.setLayout(panelLayout);
         panelLayout.setHorizontalGroup(
@@ -182,8 +160,7 @@ public class TelaLinha extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelLayout.createSequentialGroup()
-                        .addComponent(btnGerarChave)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnLimpar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnAdd)
@@ -211,12 +188,10 @@ public class TelaLinha extends javax.swing.JFrame {
                     .addComponent(panelTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtColuna, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnAdd)
-                        .addComponent(btnLimpar)
-                        .addComponent(btnCancel))
-                    .addComponent(btnGerarChave))
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAdd)
+                    .addComponent(btnLimpar)
+                    .addComponent(btnCancel))
                 .addContainerGap())
         );
 
@@ -321,17 +296,6 @@ public class TelaLinha extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnCancelActionPerformed
 
-    private void btnGerarChaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerarChaveActionPerformed
-        Random gerarChave = new Random();
-         
-        int chave = gerarChave.nextInt(5)+1;
-        while(chavesPrimarias.contains(String.valueOf(chave))){
-            chave = gerarChave.nextInt(5)+1;
-        }
-       
-        getValor.setText(String.valueOf(chave));       
-    }//GEN-LAST:event_btnGerarChaveActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -373,7 +337,6 @@ public class TelaLinha extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnCancel;
-    private javax.swing.JButton btnGerarChave;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JTextField getValor;
     private javax.swing.JLabel lblColuna;
