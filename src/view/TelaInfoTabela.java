@@ -54,13 +54,6 @@ public class TelaInfoTabela extends javax.swing.JFrame {
             ++i;
         }
         
-        
-        
-        ManipuladorTabelas.parseToTable(jTable, colunas, linhas);
-        
-        //boxColuna.setModel(new javax.swing.DefaultComboBoxModel<>(colunasStringTipo));
-        boxColuna.setModel(new javax.swing.DefaultComboBoxModel<>(ManipuladorTabelas.parseToStringVector(colunas)));
-        
         this.colunaSelected = (String) boxColuna.getSelectedItem();
 
         if (this.colunaSelected.equals(chavePrimaria)) {
@@ -68,6 +61,12 @@ public class TelaInfoTabela extends javax.swing.JFrame {
         } else {
             btnRemoveLinha.setEnabled(false);
         }
+        
+        ManipuladorTabelas.parseToTable(jTable, colunas, linhas);
+        
+        //boxColuna.setModel(new javax.swing.DefaultComboBoxModel<>(colunasStringTipo));
+        boxColuna.setModel(new javax.swing.DefaultComboBoxModel<>(ManipuladorTabelas.parseToStringVector(colunas)));
+        
     }
     
     public TelaInfoTabela() {
