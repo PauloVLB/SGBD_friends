@@ -6,7 +6,9 @@
 package view;
 
 import classes.*;
+import com.sun.javafx.image.impl.ByteRgb;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -26,9 +28,14 @@ public class TelaLinha extends javax.swing.JFrame {
     private Tabela tabela;
     private int indexArray;
     private ArrayList<String> tupla;
+    private int indexColunaPrimaria;
+    private ArrayList<String> chavesPrimarias;
+
+
+
     
     public TelaLinha(Tabela tabela) {
-        
+        chavesPrimarias = new ArrayList();
         initComponents();
         this.tabela = tabela;
         colunas = this.tabela.getColunas();
@@ -36,8 +43,27 @@ public class TelaLinha extends javax.swing.JFrame {
         tupla = new ArrayList<>();
         
         showColuna(colunas.get(indexArray));
-        
-    }
+        int index = 0;
+        for(Coluna c : colunas){
+            if(c.isChavePrimaria()){
+               indexColunaPrimaria = index; 
+            }
+            index++;
+        }
+         for(String[] linhas : tabela.getLinhas()){
+             chavesPrimarias.add(linhas[indexColunaPrimaria]);
+         }    
+         if(txtColuna.getText().contains("primary key")){
+             btnGerarChave.setEnabled(true);
+         }else{
+             btnGerarChave.setEnabled(false);
+         }
+             
+         
+    } 
+    
+    
+
     
     public TelaLinha() {
         initComponents();
@@ -62,6 +88,7 @@ public class TelaLinha extends javax.swing.JFrame {
         btnLimpar = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
         txtColuna = new javax.swing.JLabel();
+        btnGerarChave = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -152,28 +179,39 @@ public class TelaLinha extends javax.swing.JFrame {
 
         txtColuna.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
+        btnGerarChave.setBackground(new java.awt.Color(255, 255, 255));
+        btnGerarChave.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnGerarChave.setText("Gerar chave");
+        btnGerarChave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGerarChaveActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
         panel.setLayout(panelLayout);
         panelLayout.setHorizontalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnGerarChave, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
+                    .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(panelTipo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(panelNome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(getValor)
+                            .addComponent(txtColuna, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
+                        .addGap(86, 86, 86)
                         .addComponent(btnLimpar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnAdd)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCancel))
-                    .addGroup(panelLayout.createSequentialGroup()
-                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(panelTipo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(panelNome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(getValor, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
-                            .addComponent(txtColuna, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(btnCancel)))
                 .addGap(22, 22, 22))
         );
         panelLayout.setVerticalGroup(
@@ -187,11 +225,13 @@ public class TelaLinha extends javax.swing.JFrame {
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtColuna, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAdd)
-                    .addComponent(btnLimpar)
-                    .addComponent(btnCancel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnAdd)
+                        .addComponent(btnLimpar)
+                        .addComponent(btnCancel))
+                    .addComponent(btnGerarChave))
                 .addContainerGap())
         );
 
@@ -214,6 +254,8 @@ public class TelaLinha extends javax.swing.JFrame {
     }//GEN-LAST:event_getValorActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        
+        
         
         String valor = getValor.getText();
         
@@ -282,9 +324,14 @@ public class TelaLinha extends javax.swing.JFrame {
                 }
                 
             }
-       }
+       }    //Verificar se a coluna é chave primaria para deixar desponivel o botão GERAR CHAVE!!!
+            if(txtColuna.getText().contains("primary key")){
+                 btnGerarChave.setEnabled(true);
+            }else{
+              btnGerarChave.setEnabled(false);
+            }
         
-        limpar();
+            limpar();
         
     }//GEN-LAST:event_btnAddActionPerformed
 
@@ -296,9 +343,25 @@ public class TelaLinha extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnCancelActionPerformed
 
+    private void btnGerarChaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerarChaveActionPerformed
+        Random gerarChave = new Random();
+         //VERIFICA SE A CHAVE PRIMARIA JA EXISTE NA TABELA
+        int chave = gerarChave.nextInt(100)+1;
+        while(chavesPrimarias.contains(String.valueOf(chave))){
+            chave = gerarChave.nextInt(100)+1;
+        }
+       
+        getValor.setText(String.valueOf(chave));    
+
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnGerarChaveActionPerformed
+
     /**
      * @param args the command line arguments
      */
+    //EXECUTA O CODIGO 
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -337,6 +400,7 @@ public class TelaLinha extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnGerarChave;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JTextField getValor;
     private javax.swing.JLabel lblColuna;
@@ -348,11 +412,12 @@ public class TelaLinha extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void limpar() {
+        // LIMPA O TEXTO
         getValor.setText("");
     }
 
     private void tipoCorreto(String valorLido, Coluna coluna) throws Exception {
-        
+        //PEGA O TIPO DA COLUNA E TRANFORMA EM STRING PARA VERIFICAR SE É UM TIO EXISTENTE
         String tipoColuna = coluna.getTipo();
         
         switch (tipoColuna) {
@@ -382,7 +447,7 @@ public class TelaLinha extends javax.swing.JFrame {
                 break;
         }
     }
-
+    //IMPRIME O A COLUNA QUE O USUARIO IRA PREENCHER NA TELA
     private void showColuna(Coluna coluna) {
         StringBuilder sb = new StringBuilder();
         sb.append(coluna.getNome());
