@@ -335,6 +335,12 @@ public class TelaCriar extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCriarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        
+        try {
+            this.colunasCriadas = telaColuna.getColunas();
+        } catch (Exception e) {
+        }
+        
         if(!txtNome.getText().equals("") && (colunasCriadas.size() > 0)){             
             try { // qnd nao vazio
             
@@ -511,5 +517,6 @@ public class TelaCriar extends javax.swing.JFrame {
                 return null;
             }
         });
+        colunasCriadas.clear();
     }
 }
