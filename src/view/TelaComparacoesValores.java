@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author off1c
+ * @author Douglas, isaac, paulo
  */
 public class TelaComparacoesValores extends javax.swing.JFrame {
     
@@ -37,7 +37,7 @@ public class TelaComparacoesValores extends javax.swing.JFrame {
         this.doublesColuna = doublesColuna;
         this.valorAchado = valorAchado;
         
-        btnRemover.setVisible(false);
+        
         showIguais();
         
         //ManipuladorTabelas.parseToTable(jTable, colunas, linhasAchadas);
@@ -57,7 +57,7 @@ public class TelaComparacoesValores extends javax.swing.JFrame {
         this.valorAchado = valorAchado;
         
         jPanel1.setVisible(enableSlide);
-        btnRemover.setVisible(!enableSlide);
+        
         //slider.setEnabled(enableSlide);
         showIguais();
         
@@ -90,7 +90,6 @@ public class TelaComparacoesValores extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         slider = new javax.swing.JSlider();
         jLabel4 = new javax.swing.JLabel();
-        btnRemover = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Comparar Valores");
@@ -180,15 +179,6 @@ public class TelaComparacoesValores extends javax.swing.JFrame {
                 .addContainerGap(26, Short.MAX_VALUE))
         );
 
-        btnRemover.setBackground(new java.awt.Color(255, 255, 255));
-        btnRemover.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnRemover.setText("Remover");
-        btnRemover.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemoverActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
         panel.setLayout(panelLayout);
         panelLayout.setHorizontalGroup(
@@ -201,10 +191,7 @@ public class TelaComparacoesValores extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(panelLayout.createSequentialGroup()
                         .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
-                                .addComponent(btnRemover)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnVoltar))
+                            .addComponent(btnVoltar, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
                             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(0, 20, Short.MAX_VALUE))))
@@ -219,9 +206,7 @@ public class TelaComparacoesValores extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnVoltar)
-                    .addComponent(btnRemover))
+                .addComponent(btnVoltar)
                 .addGap(20, 20, 20))
         );
 
@@ -251,14 +236,6 @@ public class TelaComparacoesValores extends javax.swing.JFrame {
 
         selectComparacao();
     }//GEN-LAST:event_sliderStateChanged
-
-    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
-        
-        
-        
-        
-        
-    }//GEN-LAST:event_btnRemoverActionPerformed
 
     /**
      * @param args the command line arguments
@@ -296,7 +273,6 @@ public class TelaComparacoesValores extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnRemover;
     private javax.swing.JButton btnVoltar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

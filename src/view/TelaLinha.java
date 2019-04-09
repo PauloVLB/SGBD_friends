@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author isaacmsl
+ * @author Douglas, Isaac, Paulo
  */
 public class TelaLinha extends javax.swing.JFrame {
 
@@ -50,9 +50,10 @@ public class TelaLinha extends javax.swing.JFrame {
             }
             index++;
         }
+            //pega todas as chaves primarias
          for(String[] linhas : tabela.getLinhas()){
              chavesPrimarias.add(linhas[indexColunaPrimaria]);
-         }    
+         }   //verificar se aquela coluna é a chave primaria e deixa o botão desativado
          if(txtColuna.getText().contains("primary key")){
              btnGerarChave.setEnabled(true);
          }else{
@@ -256,14 +257,15 @@ public class TelaLinha extends javax.swing.JFrame {
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         
         
-        
+        //pega o valor da caixa de texto
         String valor = getValor.getText();
         
         boolean empty = valor.equals("");
-
+        //Verifica se a caixa de texto esta preenchida com informação
         if (empty) {
             JOptionPane.showMessageDialog(null, "Preencha todos os campos!");
         }else{ 
+            //ele vai preencher cada coluna 
             if(indexArray < colunas.size()){
                 Coluna colunaAtual = colunas.get(indexArray++);
                 String valorLido = getValor.getText();
@@ -271,15 +273,16 @@ public class TelaLinha extends javax.swing.JFrame {
                 
                 try {
                     tipoCorreto(valorLido, colunaAtual);
-                    
+                    //olha se a coluna é a chave primaria 
                     if (colunaAtual.isChavePrimaria()) {
+                        //Olha se a chave ja possui na coluna da tabela
                         if (getChavesP(colunaAtual).contains(Integer.parseInt(valorLido))) {
                             JOptionPane.showMessageDialog(null, "Chave primária já existe!");
                             chaveJaExiste = true;
                             --indexArray;
                         }
                     }
-
+                    //chave ja verificada, adiciona o valor a coluna
                     if (!chaveJaExiste) {
                         tupla.add(valorLido);
                     }
@@ -290,7 +293,7 @@ public class TelaLinha extends javax.swing.JFrame {
                 
                 
             }
-            
+            //ele salva as colunas
             if (indexArray < colunas.size()) {
                 showColuna(colunas.get(indexArray));
             } else {
@@ -460,7 +463,7 @@ public class TelaLinha extends javax.swing.JFrame {
         
         txtColuna.setText(sb.toString());
     }
-    
+    //ele pega todas as chaves primairas de todas as colunas
     private ArrayList<Integer> getChavesP(Coluna colunaAtual){
         ArrayList<Integer> chavesP = new ArrayList<>();
         int indexColuna = this.tabela.getColunas().indexOf(colunaAtual);

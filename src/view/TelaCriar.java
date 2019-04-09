@@ -18,7 +18,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author isaacmsl
+ * @author Douglas, Isaac, Paulo
  */
 public class TelaCriar extends javax.swing.JFrame {
 
@@ -477,6 +477,7 @@ public class TelaCriar extends javax.swing.JFrame {
                 
                 StringBuilder sb = new StringBuilder();
                 
+                // quando coluna é chave primaria
                 if (colunasCriadas.get(i).isChavePrimaria()) {
                     sb.append(colunasCriadas.get(i).getNome());
                     sb.append(" : ");
@@ -492,7 +493,7 @@ public class TelaCriar extends javax.swing.JFrame {
             }
         });
     }
-
+    
     private void esperarTela() {
         btnListar.setEnabled(true);
     }

@@ -14,7 +14,7 @@ import javax.swing.table.*;
 
 /**
  *
- * @author off1c
+ * @author Douglas, Isaac, Paulo
  */
 public class TelaInfoTabela extends javax.swing.JFrame {
 
@@ -229,18 +229,19 @@ public class TelaInfoTabela extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVoltarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        
+        //pega o valor lido na caixa de texto 
         String valorLido = txtFValor.getText();
         Coluna colunaSelected = this.colunas.get(boxColuna.getSelectedIndex());
-        
+        //olha que a caixa de texto esta vazia
         boolean empty = valorLido.equals("");
         
         boolean achouDado = false;
         boolean foiDouble = false;
-        
+        //verifica se a caixa de busca esta vazia
         if (empty) {
             JOptionPane.showMessageDialog(null, "Preencha todos os campos!");
-        } else {            
+        } else {
+        //verifica o tipo do dado da caixa pesquisa
             try {
                 switch (colunaSelected.getTipo().toLowerCase()) {
                     case "string":
@@ -366,6 +367,7 @@ public class TelaInfoTabela extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
+    //executa o codigo 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author isaacmsl
+ * @author Douglas, Isaac, Paulo
  */
 public class TelaColuna extends javax.swing.JFrame {
 

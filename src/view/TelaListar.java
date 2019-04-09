@@ -15,7 +15,8 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author isaacmsl
+ * @author Douglas, Isaac, Paulo
+ * 
  */
 public class TelaListar extends javax.swing.JFrame {
 
@@ -33,11 +34,13 @@ public class TelaListar extends javax.swing.JFrame {
         tabelas = new ArrayList<>();
        
         try {
+            //vai verificar se a tabela esta selecionada 
             ArrayList<Tabela> tabelasImutavel = ManipuladorIOFiles.lerArquivoTabela("tabelas.dat");
             this.tabelas = tabelasImutavel;
             tabelasSelected = new ArrayList<Tabela>();
         
             listarTabelas();
+            //recebe a exception da tabela não selecionada
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Não foi possível ler o arquivo!");
             this.dispose();
